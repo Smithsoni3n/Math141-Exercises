@@ -12,19 +12,19 @@ export default function GardenAreaGraph() {
     const graphWidth = canvas.width - 2 * padding;
     const graphHeight = canvas.height - 2 * padding;
     
-    // Window: Width 0-200 feet, Area 0-100,000 sq ft
+    // Window: Width (W) 0-200 feet, Area (A) 0-100,000 sq ft
     const xMin = 0, xMax = 200;
     const yMin = 0, yMax = 100000;
     
     const toCanvasX = (w) => padding + (w - xMin) / (xMax - xMin) * graphWidth;
     const toCanvasY = (a) => canvas.height - padding - (a - yMin) / (yMax - yMin) * graphHeight;
     
-    // THE AREA FUNCTION: A(W) = -9W² + 1800W
+    // THE AREA FUNCTION FROM PART (B): A(W) = W(1800 - 9W)
     const Area = (w) => -9 * Math.pow(w, 2) + 1800 * w;
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // 1. Draw Detailed Grid
+    // 1. Draw Detailed Grid & Ticks
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 1;
     ctx.font = '12px Arial';
@@ -48,7 +48,7 @@ export default function GardenAreaGraph() {
     ctx.lineTo(canvas.width - padding + 10, canvas.height - padding);
     ctx.stroke();
 
-    // 3. Draw Area Curve (Blue Parabola)
+    // 3. Draw Area Curve (Parabola)
     ctx.strokeStyle = '#2563eb';
     ctx.lineWidth = 4;
     ctx.beginPath();
@@ -61,7 +61,7 @@ export default function GardenAreaGraph() {
     }
     ctx.stroke();
 
-    // 4. Vertex (Max Point)
+    // 4. Vertex / Maximum Point (Part C)
     const wMax = 100, aMax = 90000;
     const maxX = toCanvasX(wMax), maxY = toCanvasY(aMax);
     ctx.setLineDash([5, 5]);
@@ -90,9 +90,9 @@ export default function GardenAreaGraph() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8">
       <div className="bg-white p-8 rounded-xl shadow-2xl border border-gray-200">
         <div className="text-center text-2xl font-bold mb-6 text-blue-700">Problem 4: Garden Area Optimization</div>
-        <canvas ref={canvasRef} width={800} height={500} className="mx-auto" />
+        <canvas ref={canvasRef} width={800} height={550} className="mx-auto" />
         <div className="mt-8 p-6 bg-blue-50 border-2 border-blue-500 rounded-lg">
-          <h3 className="text-xl font-bold text-blue-800 mb-4">✓ FINAL RESULTS:</h3>
+          <h3 className="text-xl font-bold text-blue-800 mb-4">✓ ANSWERS FOR PROBLEM 4:</h3>
           <p className="text-lg"><strong>(a) Constraint:</strong> L + 9W = 1800</p>
           <p className="text-lg"><strong>(b) Area Function:</strong> A(W) = W(1800 - 9W)</p>
           <p className="text-lg"><strong>(c) Maximum Area:</strong> 90,000 sq ft at W = 100 ft</p>
