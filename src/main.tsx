@@ -1,30 +1,32 @@
 import React from 'react';
 
 export default function GardenAreaGraph() {
-  const canvasRef = React.useRef(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
   
   React.useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     const padding = 85;
     const graphWidth = canvas.width - 2 * padding;
     const graphHeight = canvas.height - 2 * padding;
     
-    // Window: Width (W) 0-200 feet, Area (A) 0-100,000 sq ft
+    // Window: Width (W) 0-200 feet, Area (A) 0-100,000 sq feet
     const xMin = 0, xMax = 200;
     const yMin = 0, yMax = 100000;
     
-    const toCanvasX = (w) => padding + (w - xMin) / (xMax - xMin) * graphWidth;
-    const toCanvasY = (a) => canvas.height - padding - (a - yMin) / (yMax - yMin) * graphHeight;
+    const toCanvasX = (w: number) => padding + (w - xMin) / (xMax - xMin) * graphWidth;
+    const toCanvasY = (a: number) => canvas.height - padding - (a - yMin) / (yMax - yMin) * graphHeight;
     
-    // THE AREA FUNCTION FROM PART (B): A(W) = W(1800 - 9W)
-    const Area = (w) => -9 * Math.pow(w, 2) + 1800 * w;
+    // AREA FUNCTION: A(W) = W(1800 - 9W) = -9W² + 1800W
+    const Area = (w: number) => -9 * Math.pow(w, 2) + 1800 * w;
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // 1. Draw Detailed Grid & Ticks
+    // 1. Grid & Ticks
     ctx.strokeStyle = '#e5e7eb';
     ctx.lineWidth = 1;
     ctx.font = '12px Arial';
@@ -40,7 +42,7 @@ export default function GardenAreaGraph() {
       ctx.fillText(`${i.toLocaleString()}`, padding - 65, y + 5);
     }
     
-    // 2. Draw Main Axes
+    // 2. Axes
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -48,7 +50,7 @@ export default function GardenAreaGraph() {
     ctx.lineTo(canvas.width - padding + 10, canvas.height - padding);
     ctx.stroke();
 
-    // 3. Draw Area Curve (Parabola)
+    // 3. Area Curve
     ctx.strokeStyle = '#2563eb';
     ctx.lineWidth = 4;
     ctx.beginPath();
@@ -61,7 +63,7 @@ export default function GardenAreaGraph() {
     }
     ctx.stroke();
 
-    // 4. Vertex / Maximum Point (Part C)
+    // 4. Max Point (Vertex)
     const wMax = 100, aMax = 90000;
     const maxX = toCanvasX(wMax), maxY = toCanvasY(aMax);
     ctx.setLineDash([5, 5]);
@@ -72,9 +74,9 @@ export default function GardenAreaGraph() {
     ctx.fillStyle = '#dc2626';
     ctx.beginPath(); ctx.arc(maxX, maxY, 7, 0, 2 * Math.PI); ctx.fill();
     ctx.font = 'bold 15px Arial';
-    ctx.fillText(`Max Point: (100, 90,000)`, maxX - 70, maxY - 20);
+    ctx.fillText(`Max Area Point: (100, 90,000)`, maxX - 70, maxY - 20);
 
-    // 5. Labels and Units
+    // 5. Labels
     ctx.fillStyle = '#000';
     ctx.font = 'bold 16px Arial';
     ctx.textAlign = 'center';
@@ -92,7 +94,7 @@ export default function GardenAreaGraph() {
         <div className="text-center text-2xl font-bold mb-6 text-blue-700">Problem 4: Garden Area Optimization</div>
         <canvas ref={canvasRef} width={800} height={550} className="mx-auto" />
         <div className="mt-8 p-6 bg-blue-50 border-2 border-blue-500 rounded-lg">
-          <h3 className="text-xl font-bold text-blue-800 mb-4">✓ ANSWERS FOR PROBLEM 4:</h3>
+          <h3 className="text-xl font-bold text-blue-800 mb-4">✓ FINAL RESULTS:</h3>
           <p className="text-lg"><strong>(a) Constraint:</strong> L + 9W = 1800</p>
           <p className="text-lg"><strong>(b) Area Function:</strong> A(W) = W(1800 - 9W)</p>
           <p className="text-lg"><strong>(c) Maximum Area:</strong> 90,000 sq ft at W = 100 ft</p>
